@@ -58,12 +58,14 @@ void RYLR998_radio::set_mode(device_mode_e mode)
 
 void RYLR998_radio::set_frequency(int freq)
 {
-  char message[] = "AT+BAND=000000000\r\n";
-  char *numberPtr = message + 8;
-  convert_int(freq, 9, numberPtr);
+  char message[] = "AT+BAND=";
 
   Serial.print(message);
+  Serial.print(freq);
+  Serial.print("\r\n");
   radio_serial->print(message);
+  radio_serial->print(freq);
+  radio_serial->print("\r\n");
 
   wait_for_handshake();
 } 
@@ -80,12 +82,11 @@ int RYLR998_radio::get_frequency(void)
 
 void RYLR998_radio::set_address(uint16_t address)
 {
-  char message[] = "AT+ADDRESS=00000\r\n";
-  char *numberPtr = message + 11;
-  convert_int(address, 5, numberPtr);
-
-  Serial.print(message);
-  radio_serial->print(message);
+  radio_serial->print("AT+ADDRESS=");
+  radio_serial->print(address);
+  radio_serial->print("\r\n");
+  
+  wait_for_handshake();
 }
 
 
@@ -100,12 +101,9 @@ uint16_t RYLR998_radio::get_address(void)
 
 void RYLR998_radio::set_networkID(uint8_t networkID)
 {
-  char message[] = "AT+NETWORKID=00\r\n";
-  char *numberPtr = message + 13; 
-  convert_int(networkID, 2, numberPtr);
-
-  Serial.print(message);
-  radio_serial->print(message);
+  radio_serial->print("AT+NETWORK=");
+  radio_serial->print(networkID);
+  radio_serial->print("\r\n");
 
   wait_for_handshake();
 }
@@ -120,12 +118,9 @@ uint8_t RYLR998_radio::get_networkID(void)
 
 void RYLR998_radio::set_radio_power(uint8_t power_level_dbm)
 {
-  char message[14] = "AT+CRFOP=00\r\n"; 
-  char *numberPtr = message + 9;
-  convert_int(power_level_dbm, 2, numberPtr);
-
-  Serial.print(message);
-  radio_serial->print(message);
+  radio_serial->print("AT+CRFOP=");
+  radio_serial->print(power_level_dbm);
+  radio_serial->print("\r\n");
 
   wait_for_handshake();
 }
